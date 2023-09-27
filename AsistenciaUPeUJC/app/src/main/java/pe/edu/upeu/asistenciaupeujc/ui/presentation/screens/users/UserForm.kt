@@ -40,10 +40,14 @@ import pe.edu.upeu.asistenciaupeujc.ui.presentation.components.form.AccionButton
 import pe.edu.upeu.asistenciaupeujc.ui.presentation.components.form.AccionButtonSuccess
 import pe.edu.upeu.asistenciaupeujc.ui.presentation.components.form.ComboBox
 import pe.edu.upeu.asistenciaupeujc.ui.presentation.components.form.ComboBoxTwo
+import pe.edu.upeu.asistenciaupeujc.ui.presentation.components.form.DNITextField
 import pe.edu.upeu.asistenciaupeujc.ui.presentation.components.form.DatePickerCustom
 import pe.edu.upeu.asistenciaupeujc.ui.presentation.components.form.DropdownMenuCustom
+import pe.edu.upeu.asistenciaupeujc.ui.presentation.components.form.EmailTextField
+import pe.edu.upeu.asistenciaupeujc.ui.presentation.components.form.MyEasyFormsCustomStringResult
 import pe.edu.upeu.asistenciaupeujc.ui.presentation.components.form.MyFormKeys
 import pe.edu.upeu.asistenciaupeujc.ui.presentation.components.form.NameTextField
+import pe.edu.upeu.asistenciaupeujc.ui.presentation.components.form.PasswordTextField
 import pe.edu.upeu.asistenciaupeujc.ui.presentation.components.form.TimePickerCustom
 import pe.edu.upeu.asistenciaupeujc.ui.presentation.screens.actividad.ActividadFormViewModel
 import pe.edu.upeu.asistenciaupeujc.utils.TokenUtils
@@ -124,58 +128,64 @@ fun formulario(
     Scaffold(modifier = Modifier.padding(top = 60.dp, start = 16.dp, end = 16.dp, bottom = 32.dp)){
         BuildEasyForms { easyForm ->
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                NameTextField(easyForms = easyForm, text =usuario?.nombres!!,"Nomb. Usuario:", MyFormKeys.NAME )
-                var listE = listOf(
+
+
+                var listEv = listOf(
                     ComboModel("Activo","Activo"),
                     ComboModel("Desactivo","Desactivo"),
                 )
-                ComboBox(easyForm = easyForm, "Estado:", usuario?.estado!!, listE)
-
-                var listEv = listOf(
+                NameTextField( easyForm, text =usuario.nombres, "Nombre", key = MyFormKeys.NAME )
+                NameTextField( easyForm, text =usuario.apellidos, "Apellido", key = MyFormKeys.APE_MAT )
+                EmailTextField(easyForms = easyForm, text =usuario.correo , label = "Correo" , tipo = usuario.correo )
+                ComboBoxTwo(easyForm = easyForm, "Estado:", usuario.estado, listEv)
+                DNITextField(easyForms = easyForm, text = usuario.dni , label = "DNI" )
+                var listE = listOf(
                     ComboModel("SI","SI"),
                     ComboModel("NO","NO"),
                 )
-                ComboBoxTwo(easyForm = easyForm, "Apellidos:", usuario?.apellidos!!, listEv)
+                ComboBox(easyForm = easyForm, "Offlinex:", usuario?.offlinex!!, listE)
 
-                ComboBoxTwo(easyForm = easyForm, "Nombre:", usuario?.nombres!!, listEv)
-                DropdownMenuCustom(easyForm = easyForm, label = "Correo", usuario.correo, list =listEv, MyFormKeys.EMAIL )
-                DropdownMenuCustom(easyForm = easyForm, label = "DNI", usuario.dni, list =listEv, MyFormKeys.DNI )
-                DropdownMenuCustom(easyForm = easyForm, label = "Estado", usuario.estado, list =listEv, MyFormKeys.ENTSAL )
-                DropdownMenuCustom(easyForm = easyForm, label = "Offlinex:", usuario.offlinex, list =listEv, MyFormKeys.OFFLINE )
-                DropdownMenuCustom(easyForm = easyForm, label = "Contraseña", usuario.password, list =listEv, MyFormKeys.PASSWORD )
-                DropdownMenuCustom(easyForm = easyForm, label = "PerfilPrim:", usuario.perfilPrin, list =listEv, MyFormKeys.NAME )
+                PasswordTextField(easyForms = easyForm, text = usuario.password , label = "Contraseña" )
+                NameTextField(easyForms = easyForm, text = usuario.perfilPrin, label = "Perfil", key = MyFormKeys.APE_PAT )
 
-                Row(Modifier.align(Alignment.CenterHorizontally)){
-                    AccionButtonSuccess(easyForms = easyForm, "Guardar", id){
-                        val lista=easyForm.formData()
-                        person.nombres=(lista.get(0) as EasyFormsResult.StringResult).value
-                        person.apellidos=splitCadena((lista.get(1) as EasyFormsResult.GenericStateResult<String>).value)
-                        person.correo=splitCadena((lista.get(2) as EasyFormsResult.GenericStateResult<String>).value)
-                        person.dni=(lista.get(3) as EasyFormsResult.GenericStateResult<String>).value
-                        person.estado=(lista.get(4) as EasyFormsResult.GenericStateResult<String>).value
-                        person.offlinex=(lista.get(5) as EasyFormsResult.GenericStateResult<String>).value
-                        person.password=(lista.get(6) as EasyFormsResult.StringResult).value
-                        person.perfilPrin= splitCadena((lista.get(7) as EasyFormsResult.GenericStateResult<String>).value)
 
-                        if (id==0.toLong()){
-                            Log.i("AGREGAR", "M:"+ person.nombres)
-                            Log.i("AGREGAR", "VI:"+ person.apellidos)
-                            Log.i("AGREGAR", "SA:"+ person.dni)
-                            Log.i("AGREGAR", "ES:"+ person.estado)
-                            Log.i("AGREGAR", "OF:"+ person.offlinex)
+                Row(Modifier.align(Alignment.CenterHorizontally)) {
+                    AccionButtonSuccess(easyForms = easyForm, "Guardar", id) {
+                        val lista = easyForm.formData()
+
+
+
+                        person.nombres = (lista.getOrNull(0) as? EasyFormsResult.StringResult)?.value ?: ""
+                        person.apellidos = (lista.getOrNull(1) as? EasyFormsResult.StringResult)?.value ?: ""
+                        person.correo = (lista.getOrNull(2) as? EasyFormsResult.StringResult)?.value ?: ""
+                        person.estado = (lista.getOrNull(3) as? EasyFormsResult.StringResult)?.value ?: ""
+                        person.dni = (lista.getOrNull(4) as? EasyFormsResult.StringResult)?.value ?: ""
+                        person.offlinex = (lista.getOrNull(5) as? EasyFormsResult.StringResult)?.value ?: ""
+                        person.password = (lista.getOrNull(6) as? EasyFormsResult.StringResult)?.value ?: ""
+                        person.perfilPrin = (lista.getOrNull(7) as? EasyFormsResult.StringResult)?.value ?: ""
+
+                        if (id == 0.toLong()) {
+                            Log.i("AGREGAR", "Nombre:" + person.nombres)
+                            Log.i("AGREGAR", "Apellido:" + person.apellidos)
+                            Log.i("AGREGAR", "Correo:" + person.correo)
+                            Log.i("AGREGAR", "Estado:" + person.estado)
+                            Log.i("AGREGAR", "Offlinex:" + person.offlinex)
+                            Log.i("AGREGAR", "Password:" + person.password)
+                            Log.i("AGREGAR", "PerfilPrin:" + person.perfilPrin)
                             viewModel.addUsuario(person)
-                        }else{
-                            person.id=id
-                            Log.i("MODIFICAR", "M:"+person)
+                        } else {
+                            person.id = id
+                            Log.i("MODIFICAR", "M:" + person)
                             viewModel.editUsuario(person)
                         }
-                        navController.navigate(Destinations.ActividadUI.route)
+                        navController.navigate(Destinations.UsuarioUI.route)
                     }
                     Spacer()
-                    AccionButtonCancel(easyForms = easyForm, "Cancelar"){
-                        navController.navigate(Destinations.ActividadUI.route)
+                    AccionButtonCancel(easyForms = easyForm, "Cancelar") {
+                        navController.navigate(Destinations.UsuarioUI.route)
                     }
                 }
+
             }
         }
     }

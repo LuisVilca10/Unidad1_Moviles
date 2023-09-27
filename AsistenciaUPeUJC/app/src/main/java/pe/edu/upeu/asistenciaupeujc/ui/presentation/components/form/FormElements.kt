@@ -471,12 +471,14 @@ object MyCustomLengthValidationType : EasyFormsValidationType(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DNITextField(easyForms: EasyForms, text: String, label:String) {
-    val textFieldState = easyForms.getTextFieldState(MyFormKeys.DNI,
+    val textFieldState = easyForms.getTextFieldState(
+        MyFormKeys.DNI,
         MyCustomLengthValidationType,
         defaultValue = text,
     )
+    Spacer(size=2)
     val state = textFieldState.state
-    TextField(
+    OutlinedTextField(
         value = state.value,
         onValueChange = textFieldState.onValueChangedCallback,
         label = { Text(text = label) },

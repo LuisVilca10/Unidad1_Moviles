@@ -1,5 +1,6 @@
 package pe.edu.upeu.asistenciaupeujc.modelo
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -11,7 +12,8 @@ data class Usuario(
     var apellidos: String,
     var correo: String,
     var password: String,
-    var token: String,
+    @ColumnInfo(name = "token")
+    var token: String? = null,
     var dni: String,
     var perfilPrin: String,
     var estado: String,

@@ -73,8 +73,9 @@ UsuarioViewModel = hiltViewModel(), navController: NavHostController
     val isLoading by viewModel.isLoading.observeAsState(false)
     Log.i("VERX", ""+actis.size )
 
-    MyApp(navController, onAddClick = {
-        //viewModel.addUser()
+    MyApp(navController,
+        onAddClick = {
+        viewModel.addUsuario()
         navegarEditarUsuario((0).toString())
     }, onDeleteClick = {
         viewModel.deleteUsuario(it)
@@ -124,7 +125,7 @@ fun MyApp(navController: NavHostController,
         },
         FabItem(
             Icons.Filled.Favorite,
-            "Add Actvidad"
+            "Add Usuario"
         ) { onAddClick?.invoke() }
     )
 
@@ -193,7 +194,7 @@ fun MyApp(navController: NavHostController,
                                 Modifier.weight(1f),
                             ) {
                                 Text("${usuario.nombres} - ${usuario.apellidos}", fontWeight = FontWeight.Bold)
-                                val estado = LocalDate.parse(usuario.estado, DateTimeFormatter.ISO_DATE)
+                                val estado = usuario.estado
                                 Box {
                                     Text(
                                         "" + estado, color =
