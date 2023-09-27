@@ -116,15 +116,7 @@ fun MyApp(navController: NavHostController,
 
     val fabItems = listOf(
         FabItem(
-            Icons.Filled.ShoppingCart,
-            "Shopping Cart"
-        ) {
-            val toast = Toast.makeText(context, "Hola Mundo", Toast.LENGTH_LONG) // in Activity
-            toast.view!!.background.setColorFilter(Color.CYAN, PorterDuff.Mode.SRC_IN)
-            toast.show()
-        },
-        FabItem(
-            Icons.Filled.Favorite,
+            Icons.Filled.Add,
             "Add Usuario"
         ) { onAddClick?.invoke() }
     )
